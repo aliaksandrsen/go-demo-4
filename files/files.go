@@ -6,6 +6,13 @@ import (
 )
 
 func ReadFile() {
+	data, err := os.ReadFile("file.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(string(data))
 }
 
 func WriteFile(content string, name string) {
@@ -14,13 +21,12 @@ func WriteFile(content string, name string) {
 		fmt.Println(err)
 	}
 
+	defer file.Close()
 	_, err = file.WriteString(content)
 	if err != nil {
-		file.Close()
 		fmt.Println(err)
 		return
 	}
 
 	fmt.Println("Файл успешно записан:", name)
-	file.Close()
 }
