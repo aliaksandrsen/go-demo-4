@@ -1,10 +1,12 @@
 package account
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math/rand/v2"
 	"net/url"
+	"time"
 
 	"github.com/fatih/color"
 )
@@ -12,20 +14,16 @@ import (
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
 
 type Account struct {
-	login    string
-	password string
-	url      string
+	Login     string    `json:"login"`
+	Password  string    `json:"password"`
+	Url       string    `json:"url"`
+	CreatedAt time.Time `json:"ceatedAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-// type accountWirWithTimeStamp struct {
-// 	createdAt time.Time
-// 	updatedAt time.Time
-// 	account
-// }
-
 func (acc Account) OutputPassword() {
-	color.Cyan(acc.login)
-	fmt.Println(acc.login, acc.password, acc.url)
+	color.Cyan(acc.Login)
+	fmt.Println(acc.Login, acc.Password, acc.Url)
 }
 
 func (acc *Account) generatePassword(n int) {
@@ -34,7 +32,16 @@ func (acc *Account) generatePassword(n int) {
 		res[i] = letterRunes[rand.IntN(len(letterRunes))]
 	}
 
-	acc.password = string(res)
+	acc.Password = string(res)
+}
+
+func (acc Account) ToBytes() ([]byte, error) {
+	file, err := json.Marshal(acc)
+	if err != nil {
+		return nil, err
+	}
+
+	return file, nil
 }
 
 func NewAccount(login, password, urlString string) (*Account, error) {
@@ -47,10 +54,14 @@ func NewAccount(login, password, urlString string) (*Account, error) {
 	}
 
 	acc := &Account{
-		login:    login,
-		password: password,
-		url:      urlString,
+		Login:    login,
+		Password: password,
+		Url:      urlString,
 	}
+
+	// field, _ := reflect.TypeOf(acc).Elem().FieldByName("login")
+	// fmt.Println(string(field.Tag))
+
 	if password == "" {
 		acc.generatePassword(5)
 	}

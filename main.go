@@ -8,21 +8,27 @@ import (
 )
 
 func main() {
-	files.ReadFile()
-	files.WriteFile("Hello, World!", "file.txt")
+	CreateAccaunt()
+}
+
+func CreateAccaunt() {
 	login := promptData("Веедите логин")
 	password := promptData("Веедите пароль (оставьте пустым для генерации)")
 	url := promptData("Веедите url")
 
-	account1, err := account.NewAccount(login, password, url)
+	myAccount, err := account.NewAccount(login, password, url)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 
-	account1.OutputPassword()
+	file, err := myAccount.ToBytes()
+	if err != nil {
+		fmt.Println("Не удалось преобразовать в json")
+		return
+	}
 
-	fmt.Printf("account1: %v\n", account1)
+	files.WriteFile(file, "data.json")
 }
 
 func promptData(prompt string) string {
