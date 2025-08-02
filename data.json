@@ -1,1 +1,19 @@
-{"login":"1234","password":"uH3nK","url":"http://123e.com","ceatedAt":"0001-01-01T00:00:00Z","updatedAt":"0001-01-01T00:00:00Z"}
+{
+  "accounts": [
+    {
+      "login": "red",
+      "password": "uQCK0",
+      "url": "http://red.com",
+      "ceatedAt": "0001-01-01T00:00:00Z",
+      "updatedAt": "0001-01-01T00:00:00Z"
+    },
+    {
+      "login": "xxx",
+      "password": "rd0ZC",
+      "url": "https://xxx.com",
+      "ceatedAt": "0001-01-01T00:00:00Z",
+      "updatedAt": "0001-01-01T00:00:00Z"
+    }
+  ],
+  "updatedAt": "2025-08-02T20:27:11.076692+04:00"
+}

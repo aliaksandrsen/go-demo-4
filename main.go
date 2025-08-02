@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"demo/app-4/account"
-	"demo/app-4/files"
 )
 
 func getMenu() {
@@ -60,15 +59,6 @@ func CreateAccount() {
 
 	vault := account.NewVault()
 	vault.AddAccount(*myAccount)
-
-	data, err := vault.ToBytes()
-	// file, err := myAccount.ToBytes()
-	if err != nil {
-		fmt.Println("Не удалось преобразовать в json")
-		return
-	}
-
-	files.WriteFile(data, "data.json")
 }
 
 func promptData(prompt string) string {
