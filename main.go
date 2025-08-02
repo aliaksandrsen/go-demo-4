@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"demo/app-4/account"
+
+	"github.com/fatih/color"
 )
 
 func getMenu() {
@@ -15,6 +17,8 @@ func getMenu() {
 }
 
 func main() {
+	vault := account.NewVault()
+
 	for {
 		getMenu()
 
@@ -22,10 +26,10 @@ func main() {
 		fmt.Scanln(&inputValue)
 
 		if inputValue == 1 {
-			CreateAccount()
+			CreateAccount(vault)
 		}
 		if inputValue == 2 {
-			FindAccount()
+			FindAccount(vault)
 		}
 		if inputValue == 3 {
 			DeleteAccount()
@@ -36,9 +40,17 @@ func main() {
 	}
 }
 
-func FindAccount() {
-	fmt.Println("Аккаунт найден")
-	fmt.Println("")
+func FindAccount(vault *account.Vault) {
+	url := promptData("Bведите URL для поиска")
+	accounts := vault.FindAccountsByURL(url)
+
+	if len(accounts) == 0 {
+		color.Red("Аккаунтов не найдено")
+	}
+
+	for _, account := range accounts {
+		account.Output()
+	}
 }
 
 func DeleteAccount() {
@@ -46,7 +58,7 @@ func DeleteAccount() {
 	fmt.Println("")
 }
 
-func CreateAccount() {
+func CreateAccount(vault *account.Vault) {
 	login := promptData("Веедите логин")
 	password := promptData("Веедите пароль (оставьте пустым для генерации)")
 	url := promptData("Веедите url")
@@ -57,7 +69,6 @@ func CreateAccount() {
 		return
 	}
 
-	vault := account.NewVault()
 	vault.AddAccount(*myAccount)
 }
 

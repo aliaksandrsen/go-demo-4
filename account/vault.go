@@ -2,6 +2,7 @@ package account
 
 import (
 	"encoding/json"
+	"strings"
 	"time"
 
 	"demo/app-4/files"
@@ -51,4 +52,17 @@ func (vault *Vault) ToBytes() ([]byte, error) {
 	}
 
 	return file, nil
+}
+
+func (vault *Vault) FindAccountsByURL(url string) []Account {
+	var result []Account
+	for _, account := range vault.Accounts {
+		isMatched := strings.Contains(account.Url, url)
+
+		if isMatched {
+			result = append(result, account)
+		}
+	}
+
+	return result
 }
