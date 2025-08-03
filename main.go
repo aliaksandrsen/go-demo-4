@@ -32,7 +32,7 @@ func main() {
 			FindAccount(vault)
 		}
 		if inputValue == 3 {
-			DeleteAccount()
+			DeleteAccount(vault)
 		}
 		if inputValue == 4 {
 			break
@@ -53,9 +53,14 @@ func FindAccount(vault *account.Vault) {
 	}
 }
 
-func DeleteAccount() {
-	fmt.Println("Аккаунт удален")
-	fmt.Println("")
+func DeleteAccount(vault *account.Vault) {
+	url := promptData("Bведите URL для поиска")
+	isDeleted := vault.DeleteAccountsByURL(url)
+	if isDeleted {
+		color.Green("Аккаунт удален")
+	} else {
+		color.Red("Аккаунт не найден")
+	}
 }
 
 func CreateAccount(vault *account.Vault) {
