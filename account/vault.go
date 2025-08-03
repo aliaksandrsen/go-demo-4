@@ -5,10 +5,13 @@ import (
 	"strings"
 	"time"
 
-	"demo/app-4/files"
-
-	"github.com/fatih/color"
+	"demo/app-4/account/output"
 )
+
+type Db interface {
+	Read() ([]byte, error)
+	Write([]byte)
+}
 
 type Vault struct {
 	Accounts  []Account `json:"accounts"`
@@ -17,10 +20,10 @@ type Vault struct {
 
 type VaultWithDB struct {
 	Vault
-	db files.JsonDB
+	db Db
 }
 
-func NewVault(db *files.JsonDB) *VaultWithDB {
+func NewVault(db Db) *VaultWithDB {
 	file, err := db.Read()
 	if err != nil {
 		return &VaultWithDB{
@@ -28,19 +31,19 @@ func NewVault(db *files.JsonDB) *VaultWithDB {
 				Accounts:  []Account{},
 				UpdatedAt: time.Now(),
 			},
-			db: *db,
+			db: db,
 		}
 	}
 	var vault Vault
 
 	err = json.Unmarshal(file, &vault)
 	if err != nil {
-		color.Red("Не удалось разобрать файл data.json")
+		output.PrintError("Не удалось разобрать файл data.json")
 	}
 
 	return &VaultWithDB{
 		Vault: vault,
-		db:    *db,
+		db:    db,
 	}
 }
 
@@ -50,7 +53,7 @@ func (vault *VaultWithDB) AddAccount(account Account) {
 
 	data, err := vault.Vault.ToBytes()
 	if err != nil {
-		color.Red("Не удалось преобразовать")
+		output.PrintError("Не удалось преобразовать")
 	}
 
 	vault.db.Write(data)
@@ -97,7 +100,7 @@ func (vault *VaultWithDB) DeleteAccountsByURL(url string) bool {
 
 	data, err := vault.Vault.ToBytes()
 	if err != nil {
-		color.Red("Не удалось преобразовать")
+		output.PrintError("Не удалось преобразовать")
 	}
 
 	vault.db.Write(data)
