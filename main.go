@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"demo/app-4/account"
+	"demo/app-4/files"
 
 	"github.com/fatih/color"
 )
@@ -17,7 +18,7 @@ func getMenu() {
 }
 
 func main() {
-	vault := account.NewVault()
+	vault := account.NewVault(files.NewJsonDB("data.json"))
 
 	for {
 		getMenu()
@@ -40,7 +41,7 @@ func main() {
 	}
 }
 
-func FindAccount(vault *account.Vault) {
+func FindAccount(vault *account.VaultWithDB) {
 	url := promptData("Bведите URL для поиска")
 	accounts := vault.FindAccountsByURL(url)
 
@@ -53,7 +54,7 @@ func FindAccount(vault *account.Vault) {
 	}
 }
 
-func DeleteAccount(vault *account.Vault) {
+func DeleteAccount(vault *account.VaultWithDB) {
 	url := promptData("Bведите URL для поиска")
 	isDeleted := vault.DeleteAccountsByURL(url)
 	if isDeleted {
@@ -63,7 +64,7 @@ func DeleteAccount(vault *account.Vault) {
 	}
 }
 
-func CreateAccount(vault *account.Vault) {
+func CreateAccount(vault *account.VaultWithDB) {
 	login := promptData("Веедите логин")
 	password := promptData("Веедите пароль (оставьте пустым для генерации)")
 	url := promptData("Веедите url")

@@ -13,7 +13,14 @@
       "url": "https://xxx.com",
       "ceatedAt": "0001-01-01T00:00:00Z",
       "updatedAt": "0001-01-01T00:00:00Z"
+    },
+    {
+      "login": "we.ru",
+      "password": "LQd4S",
+      "url": "https://we.ru",
+      "ceatedAt": "0001-01-01T00:00:00Z",
+      "updatedAt": "0001-01-01T00:00:00Z"
     }
   ],
-  "updatedAt": "2025-08-02T20:27:11.076692+04:00"
+  "updatedAt": "2025-08-03T13:34:10.49566+04:00"
 }
