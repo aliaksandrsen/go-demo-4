@@ -9,6 +9,12 @@ import (
 	"github.com/fatih/color"
 )
 
+var menu = map[string]func(*account.VaultWithDB){
+	"1": CreateAccount,
+	"2": FindAccount,
+	"3": DeleteAccount,
+}
+
 func main() {
 	vault := account.NewVault(files.NewJsonDB("data.json"))
 
@@ -22,18 +28,12 @@ func main() {
 			"Выберите вариант",
 		})
 
-		if inputValue == "1" {
-			CreateAccount(vault)
-		}
-		if inputValue == "2" {
-			FindAccount(vault)
-		}
-		if inputValue == "3" {
-			DeleteAccount(vault)
-		}
-		if inputValue == "4" {
+		menuFunc := menu[inputValue]
+		if menuFunc == nil {
 			break
 		}
+
+		menuFunc(vault)
 	}
 }
 
