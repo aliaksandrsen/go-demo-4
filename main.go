@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"demo/app-4/account"
 	"demo/app-4/files"
@@ -37,9 +38,13 @@ func main() {
 	}
 }
 
+func checkUrl(account *account.Account, str string) bool {
+	return strings.Contains(account.Url, str)
+}
+
 func FindAccount(vault *account.VaultWithDB) {
 	url := promptData([]string{"Bведите URL для поиска"})
-	accounts := vault.FindAccountsByURL(url)
+	accounts := vault.FindAccounts(url, checkUrl)
 
 	if len(accounts) == 0 {
 		color.Red("Аккаунтов не найдено")
