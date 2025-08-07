@@ -12,8 +12,9 @@ import (
 
 var menu = map[string]func(*account.VaultWithDB){
 	"1": CreateAccount,
-	"2": FindAccount,
-	"3": DeleteAccount,
+	"2": FindAccount("URL"),
+	"3": FindAccount("login"),
+	"4": DeleteAccount,
 }
 
 func main() {
@@ -23,9 +24,10 @@ func main() {
 		inputValue := promptData([]string{
 			"",
 			"Введите 1 для создания аккаунта",
-			"Введите 2 для поиска аккаунта",
-			"Введите 3 для удаления аккаунта",
-			"Введите 4 для выхода",
+			"Введите 2 для поиска аккаунта по URL",
+			"Введите 3 для поиска аккаунта по имени",
+			"Введите 4 для удаления аккаунта",
+			"Введите 5 для выхода",
 			"Выберите вариант",
 		})
 
@@ -42,16 +44,27 @@ func checkUrl(account *account.Account, str string) bool {
 	return strings.Contains(account.Url, str)
 }
 
-func FindAccount(vault *account.VaultWithDB) {
-	url := promptData([]string{"Bведите URL для поиска"})
-	accounts := vault.FindAccounts(url, checkUrl)
+func checkLogin(account *account.Account, str string) bool {
+	return strings.Contains(account.Login, str)
+}
 
-	if len(accounts) == 0 {
-		color.Red("Аккаунтов не найдено")
-	}
+var checkMap = map[string]func(*account.Account, string) bool{
+	"URL":   checkUrl,
+	"login": checkLogin,
+}
 
-	for _, account := range accounts {
-		account.Output()
+func FindAccount(value string) func(*account.VaultWithDB) {
+	return func(vault *account.VaultWithDB) {
+		str := promptData([]string{fmt.Sprintf("Введите %s для поиска", value)})
+		accounts := vault.FindAccounts(str, checkMap[value])
+
+		if len(accounts) == 0 {
+			color.Red("Аккаунтов не найдено")
+		}
+
+		for _, account := range accounts {
+			account.Output()
+		}
 	}
 }
 
